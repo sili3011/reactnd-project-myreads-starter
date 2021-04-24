@@ -41,12 +41,12 @@ class BookshelfComponent extends Component {
                     { this.state.searchResponse && this.state.searchResponse.length > 0 && 
                     <ol className="books-grid">{this.state.searchResponse.map(book => 
                         <li key={book.id}>
-                            <BookComponent width={150} height={200} title={book.title} author={book.author} img={book.imageLinks.thumbnail}/>
+                            <BookComponent id={book.id} width={150} height={200} title={book.title} author={book.author} img={book.imageLinks.thumbnail} handleMoveSelected={(selected, id) => this.props.handleMoveSelected(selected, id)} current={book.shelf}/>
                         </li>)}
                     </ol>
                     }
                     {this.state.searchPhrase === '' && <div className="center-text">Start searching by entering keywords in the input above.</div>}
-                    {(this.state.searchPhrase !== '' && this.state.searchResponse.error) && <div className="center-text">Sorry! Couldnt find anything matching your keywords!</div>}
+                    {(this.state.searchPhrase !== '' && this.state.searchResponse && this.state.searchResponse.error) && <div className="center-text">Sorry! Couldnt find anything matching your keywords!</div>}
                 </div>
             </div>
         )

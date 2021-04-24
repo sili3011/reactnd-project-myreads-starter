@@ -6,7 +6,7 @@ function BookComponent(props) {
         <div className="book-top">
             <div className="book-cover" style={{ width: props.width, height: props.height, backgroundImage: `url("${props.img}")` }}></div>
                 <div className="book-shelf-changer">
-                    <select>
+                    <select value={props.current} onChange={(e) => props.handleMoveSelected(e.target.value, props.id)}>
                         <option value="move" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>

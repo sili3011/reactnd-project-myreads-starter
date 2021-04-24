@@ -13,7 +13,7 @@ class BookshelfComponent extends Component {
                         */}
                         {this.props.books.map(book => 
                         <li key={book.id}>
-                            <BookComponent width={130} height={190} img={book.imageLinks.thumbnail} title={book.title} author={book.author}/>
+                            <BookComponent id={book.id} width={130} height={190} img={book.imageLinks.thumbnail} title={book.title} author={book.author} handleMoveSelected={(selected, id) => this.props.handleMoveSelected(selected, id)} current={book.shelf}/>
                         </li>
                         )}
                     </ol>

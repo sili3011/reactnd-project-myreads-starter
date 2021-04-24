@@ -18,6 +18,37 @@ class BooksApp extends React.Component {
     );
   }
 
+  mapBook = (id, shelf) => {
+    const currentBook = this.state.books.find(book => book.id === id);
+    currentBook.shelf = shelf;
+    return currentBook;
+  }
+
+  handleMoveSelected = (selected, id) => {
+    if(this.state.books.find(book => book.id === id) !== undefined) {
+      BooksAPI.update(id, selected).then(bookIds =>
+        {
+          const newBooks = [];
+          for (const [shelfName, books] of Object.entries(bookIds)) {
+            for(const id of books){
+              newBooks.push(this.mapBook(id, shelfName));
+            }
+          }
+          this.setState(currentValue => ({
+            books: newBooks
+          }));
+        }
+      );
+    } else {
+      BooksAPI.get(id).then(book => {
+        book.shelf = selected;
+        this.setState(currentValue => ({
+          books: [...currentValue.books, book]
+        }));
+      });
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -27,9 +58,9 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <BookshelfComponent title='Currently Reading' books={this.state.books.filter(book => book.shelf === 'currentlyReading')}/>
-              <BookshelfComponent title='Want to Read' books={this.state.books.filter(book => book.shelf === 'wantToRead')}/>
-              <BookshelfComponent title='Read' books={this.state.books.filter(book => book.shelf === 'read')}/>
+              <BookshelfComponent title='Currently Reading' books={this.state.books.filter(book => book.shelf === 'currentlyReading')} handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}/>
+              <BookshelfComponent title='Want to Read' books={this.state.books.filter(book => book.shelf === 'wantToRead')} handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}/>
+              <BookshelfComponent title='Read' books={this.state.books.filter(book => book.shelf === 'read')} handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}/>
               <Link to='/search' className="open-search">
                 <button>Add a book</button>
               </Link>
@@ -41,7 +72,8 @@ class BooksApp extends React.Component {
           <SearchComponent onCreateContact={(newContact) => {
               this.createContact(newContact);
               history.pushState('/');
-            }}/>
+            }}
+            handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}/>
         )}>
         </Route>
       </div>
