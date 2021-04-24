@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import BookComponent from './BookComponent'
 import * as BooksAPI from './BooksAPI'
 
-class BookshelfComponent extends Component {
+class SearchComponent extends Component {
     state = {
         searchPhrase: '',
         searchResponse: []
@@ -41,7 +41,7 @@ class BookshelfComponent extends Component {
                     { this.state.searchResponse && this.state.searchResponse.length > 0 && 
                     <ol className="books-grid">{this.state.searchResponse.map(book => 
                         <li key={book.id}>
-                            <BookComponent id={book.id} width={150} height={200} title={book.title} author={book.author} img={book.imageLinks.thumbnail} handleMoveSelected={(selected, id) => this.props.handleMoveSelected(selected, id)} current={book.shelf}/>
+                            <BookComponent id={book.id} width={150} height={200} title={book.title} authors={book.authors} imgs={book.imageLinks} handleMoveSelected={(selected, id) => this.props.handleMoveSelected(selected, id)} current={this.props.findCurrent(book)}/>
                         </li>)}
                     </ol>
                     }
@@ -53,4 +53,4 @@ class BookshelfComponent extends Component {
     }
 }
 
-export default BookshelfComponent
+export default SearchComponent

@@ -25,28 +25,35 @@ class BooksApp extends React.Component {
   }
 
   handleMoveSelected = (selected, id) => {
-    if(this.state.books.find(book => book.id === id) !== undefined) {
-      BooksAPI.update(id, selected).then(bookIds =>
-        {
-          const newBooks = [];
-          for (const [shelfName, books] of Object.entries(bookIds)) {
-            for(const id of books){
-              newBooks.push(this.mapBook(id, shelfName));
-            }
-          }
-          this.setState(currentValue => ({
-            books: newBooks
-          }));
-        }
-      );
-    } else {
-      BooksAPI.get(id).then(book => {
+    if(this.state.books.find(book => book.id === id) === undefined) {
+       BooksAPI.get(id).then(book => {
         book.shelf = selected;
         this.setState(currentValue => ({
           books: [...currentValue.books, book]
         }));
       });
     }
+    BooksAPI.update(id, selected).then(bookIds =>
+      {
+        const newBooks = [];
+        for (const [shelfName, books] of Object.entries(bookIds)) {
+          for(const id of books){
+            newBooks.push(this.mapBook(id, shelfName));
+          }
+        }
+        this.setState(currentValue => ({
+          books: newBooks
+        }));
+      }
+    );
+  }
+
+  findCurrent = (book) => {
+    const cur = this.state.books.find(b => b.id === book.id);
+    if(cur) {
+      return cur.shelf;
+    }
+    return "none";
   }
 
   render() {
@@ -73,7 +80,8 @@ class BooksApp extends React.Component {
               this.createContact(newContact);
               history.pushState('/');
             }}
-            handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}/>
+            handleMoveSelected={(selected, id) => this.handleMoveSelected(selected, id)}
+            findCurrent={(book) => this.findCurrent(book)}/>
         )}>
         </Route>
       </div>
