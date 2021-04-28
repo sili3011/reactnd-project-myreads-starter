@@ -38,7 +38,7 @@ class SearchComponent extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    { this.state.searchResponse && this.state.searchResponse.length > 0 && 
+                    { this.state.searchPhrase !== '' && this.state.searchResponse && this.state.searchResponse.length > 0 && 
                     <ol className="books-grid">{this.state.searchResponse.map(book => 
                         <li key={book.id}>
                             <BookComponent id={book.id} width={150} height={200} title={book.title} authors={book.authors} imgs={book.imageLinks} handleMoveSelected={(selected, id) => this.props.handleMoveSelected(selected, id)} current={this.props.findCurrent(book)}/>
