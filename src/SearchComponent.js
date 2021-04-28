@@ -13,9 +13,13 @@ class SearchComponent extends Component {
         this.setState((currentState) => ({
             searchPhrase: input
         }));
-        BooksAPI.search(input).then(ret => this.setState((currentState) => ({
-            searchResponse: ret
-        })));
+        BooksAPI.search(input).then(ret => {
+            if(this.state.searchPhrase !== '') {
+                this.setState((currentState) => ({
+                    searchResponse: ret
+                })
+            )}
+        });
     }
 
     render() {
