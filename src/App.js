@@ -20,7 +20,9 @@ class BooksApp extends React.Component {
 
   mapBook = (id, shelf) => {
     const currentBook = this.state.books.find(book => book.id === id);
-    currentBook.shelf = shelf;
+    if(currentBook) {
+      currentBook.shelf = shelf;
+    }
     return currentBook;
   }
 
@@ -38,7 +40,10 @@ class BooksApp extends React.Component {
         const newBooks = [];
         for (const [shelfName, books] of Object.entries(bookIds)) {
           for(const id of books){
-            newBooks.push(this.mapBook(id, shelfName));
+            const b = this.mapBook(id, shelfName);
+            if(b) {
+              newBooks.push(b);
+            }
           }
         }
         this.setState(currentValue => ({
